@@ -5,6 +5,7 @@ from django.contrib import admin
 from .models import *
 
 #to show Customer table to django admin page
-admin.site.register(Customers)
+admin.site.register(Customer)
 admin.site.register(Product)
+admin.site.register(Tag)
 admin.site.register(Order)
