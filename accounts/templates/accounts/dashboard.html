@@ -4,7 +4,7 @@
 {#inside the block named "content" write this code#}
 {% block content %}
 
-    {% include 'accounts/status.html' %}
+{% include 'accounts/status.html' %}
 
 <div class="row">
 	<div class="col-md-5">
@@ -17,12 +17,14 @@
 					<th>Customer</th>
 					<th>Phone</th>
 				</tr>
-                {% for customer in customers %}
-                    <tr>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.phone }}</td>
-                    </tr>
-                {% endfor %}
+				{% for customer in customers %}
+				<tr>
+					<!-- Here it will redirect us to '/customer/customer.id' link
+					"customer" is the name of link '/customer' alloted in urls.py file -->
+					<td><a href="{% url 'customer' customer.id%}">{{ customer.name }}</a></td>
+					<td>{{ customer.phone }}</td>
+				</tr>
+				{% endfor %}
 
 			</table>
 		</div>
@@ -41,15 +43,15 @@
 					<th>Update</th>
 					<th>Remove</th>
 				</tr>
-                {% for order in orders %}
-                    <tr>
-                    <td>{{ order.product }}</td>
-                    <td>{{ order.date_created }}</td>
-                    <td>{{ order.status }}</td>
-                    <td><a href="">Update</a> </td>
-                        <td><a href="">Delete</a> </td>
-                    </tr>
-                {% endfor %}
+				{% for order in orders %}
+				<tr>
+					<td>{{ order.product }}</td>
+					<td>{{ order.date_created }}</td>
+					<td>{{ order.status }}</td>
+					<td><a href="" class="btn btn-sm btn-info">Update</a> </td>
+					<td><a href="" class="btn btn-sm btn-danger">Delete</a> </td>
+				</tr>
+				{% endfor %}
 			</table>
 		</div>
 	</div>
