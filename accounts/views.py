@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import *
+from .forms import OrderForm
 # Create your views here.
 
 def home(request):
@@ -25,3 +26,14 @@ def products(request):
     products=Product.objects.all()
     return render(request,'accounts/products.html', {'products':products})
     # {'products_name':products} we can call the value products_name having value products in products.html template
+
+def createOrder(request):
+    form=OrderForm()
+    if request.method=='POST':
+        form=OrderForm(request.POST)#set the data revieved from htmlform to variable form
+        if form.is_valid():
+            form.save() #save data
+            return redirect('/') #redirect to home pagr
+        # print(request.POST)
+    context={'form':form}
+    return render(request,'accounts/order_form.html',context)
