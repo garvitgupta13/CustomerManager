@@ -14,8 +14,12 @@ def home(request):
     context={'orders':orders,'customers':customers,'total_customers':total_customers,'total_orders':total_orders,'delivered':delivered,'pending':pending}
     return  render(request,'accounts/dashboard.html',context)#this context data will be passed to dashboard.html
 
-def customer(request):
-    return render(request,'accounts/customers.html')
+def customer(request,custId):
+    customer=Customer.objects.get(id=custId)
+    orders=customer.order_set.all() #get all the child object(of type order) of customer
+    order_cnt=orders.count()
+    context={'customer':customer,'orders':orders,'order_cnt':order_cnt}
+    return render(request,'accounts/customers.html',context)
 
 def products(request):
     products=Product.objects.all()
