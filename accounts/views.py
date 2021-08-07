@@ -37,3 +37,14 @@ def createOrder(request):
         # print(request.POST)
     context={'form':form}
     return render(request,'accounts/order_form.html',context)
+
+def updateOrder(request, orderId):
+    order=Order.objects.get(id=orderId)
+    form=OrderForm(instance=order)#set the order in form, it will already fill the form with order data
+    if request.method=='POST':
+        form=OrderForm(request.POST,instance=order)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context={'form':form}
+    return render(request,'accounts/order_form.html',context)
