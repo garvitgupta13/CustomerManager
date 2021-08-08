@@ -7,7 +7,19 @@
         <div class="card card-body">
             <form action="" method="POST">
                 {% csrf_token %}
-                {{ form }}
+                {% if formset %}
+                <!--Sends formset data in such a way that we able to iterate over it-->
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    {{ form }}
+                    <br>
+                    <br>
+                {% endfor %}
+                {% endif %}
+
+                {% if form %}
+                    {{ form }}
+                {% endif %}
                 <input type="submit" name="Submit">
             </form>
         </div>

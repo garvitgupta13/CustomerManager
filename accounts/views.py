@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.forms import inlineformset_factory
 from .models import *
 from .forms import OrderForm
 # Create your views here.
@@ -27,15 +28,19 @@ def products(request):
     return render(request,'accounts/products.html', {'products':products})
     # {'products_name':products} we can call the value products_name having value products in products.html template
 
-def createOrder(request):
-    form=OrderForm()
+def createOrder(request,custId):
+    OrderFormSet=inlineformset_factory(Customer, Order, fields=('product','status'), extra=5)#(parent modelobject, child model object, fields you want in form
+    customer=Customer.objects.get(id=custId)
+    formset= OrderFormSet(queryset=Order.objects.none(), instance=customer)#for which customer we want this form
+    # form=OrderForm(initial={'customer':customer})#fill the 'customer' attribute of form with customer
     if request.method=='POST':
-        form=OrderForm(request.POST)#set the data revieved from htmlform to variable form
-        if form.is_valid():
-            form.save() #save data
+        # form=OrderForm(request.POST)#set the data revieved from htmlform to variable form
+        formset=OrderFormSet(request.POST, instance=customer)
+        if formset.is_valid():
+            formset.save() #save data
             return redirect('/') #redirect to home pagr
         # print(request.POST)
-    context={'form':form}
+    context={'formset':formset}
     return render(request,'accounts/order_form.html',context)
 
 def updateOrder(request, orderId):
