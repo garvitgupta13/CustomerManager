@@ -1,5 +1,14 @@
 {% load static %}
 
+<style>
+    .hello-msg{
+        font-size: 18px;
+        color: white;
+        margin-right: 20px;
+        justify-content: end !important;
+    }
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
@@ -22,4 +31,6 @@
       </ul>
     </div>
   </div>
+    <div class="hello-msg container">Hello {{ request.user }}</div>
+    <span><a href="{% url 'logout' %}">Logout</a> </span>
 </nav>
