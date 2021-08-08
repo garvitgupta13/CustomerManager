@@ -1,10 +1,12 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from django.forms import inlineformset_factory
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib import messages
+from django.forms import inlineformset_factory#for multiple form
+from django.contrib.auth.forms import UserCreationForm#for Creating a user
+from django.contrib import messages #to send flash messages after signup
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout #for login, logout
+
+
 
 from .models import *
 from .forms import OrderForm, CreateUserForm
