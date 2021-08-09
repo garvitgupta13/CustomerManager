@@ -1,0 +1,11 @@
+{#extent the html from main.html#}
+{% extends 'accounts/main.html' %}
+
+{#inside the block named "content" write this code#}
+{% block content %}
+
+{% include 'accounts/status.html' %}
+
+    <h3>User Profile</h3>
+
+{% endblock %}
