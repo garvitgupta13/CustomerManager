@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm#for Creating a user
 from django.contrib import messages #to send flash messages after signup
 
 from django.contrib.auth import authenticate, login, logout #for login, logout
+from django.contrib.auth.models import Group #to set group
 
 from django.contrib.auth.decorators import login_required #for restricted access
 
@@ -20,9 +21,13 @@ def registerPage(request):
     if (request.method == "POST"):
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, user + "'s account created successfully")  # send a flash mesaage
+            user=form.save()
+            username = form.cleaned_data.get('username')
+
+            group=Group.objects.get(name='customer')#get the group names 'customer'
+            user.groups.add(group) #add this customer group to user, i.e assign customer group to the user who registers
+
+            messages.success(request, username + "'s account created successfully")  # send a flash mesaage
             return redirect('login')
 
     context = {'form': form}
