@@ -28,8 +28,26 @@ def allowed_users(allowed_roles=[]):
         return wrapper_func
     return decorator
 
+#it is just a fix to coverup the fault caused by allowed_users decorator
+#fault: if we use 'allowed_user' in home page then after customer login he will get
+#       "You are not authorized to view this page" and cannot move anywhre else, so
+#fix:   Redirect him to 'user' link if he is a customer
+def admin_only(view_func):
+    def wrapper_func(request, *args, **kwargs):
+        group=None
+        if request.user.groups.exists():
+            group = request.user.groups.all()[0].name  # get the name of 1st group
+
+        # if customer is accessing that page then redirect him to user page
+        if group == 'customer':
+            return redirect('user')
+        if group == 'admin':
+            return view_func(request, *args, **kwargs)
+
+    return wrapper_func
+
 # eg:
-# Here we pass the list of allowed roles to allowed_users function and then our decorator can access it
+# Here we pass the list of allowed_roles to allowed_users function and then our decorator can access it
 # @allowed_users(allowed_roles=["admin"])
 # def home(request):
 #     ........

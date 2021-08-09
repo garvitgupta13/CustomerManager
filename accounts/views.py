@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required #for restricted access
 from .models import *
 from .forms import OrderForm, CreateUserForm
 from .filters import OrderFilter
-from .decorators import unauthenticated_user, allowed_users
+from .decorators import unauthenticated_user, allowed_users, admin_only
 # Create your views here.
 
 @unauthenticated_user
@@ -53,9 +53,9 @@ def userPage(request):
     return render(request, 'accounts/user.html', context)
 
 #Adding decorator above home page view, if the user is not logged in then redirect him to 'login' url
-#Here 2nd decorator will allow only users with admin role to access this function
+#2nd decorator: If any customer will try to access this page then we will redirect him to 'user' link
 @login_required(login_url='login')
-@allowed_users(allowed_roles=["admin"])
+@admin_only
 def home(request):
     customers=Customer.objects.all()
     orders=Order.objects.all()
@@ -67,6 +67,7 @@ def home(request):
     context={'orders':orders,'customers':customers,'total_customers':total_customers,'total_orders':total_orders,'delivered':delivered,'pending':pending}
     return  render(request,'accounts/dashboard.html',context)#this context data will be passed to dashboard.html
 
+#Here 2nd decorator will allow only users with admin role to access this function
 @login_required(login_url='login')
 @allowed_users(allowed_roles=["admin"])
 def customer(request,custId):
